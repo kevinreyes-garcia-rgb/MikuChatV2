@@ -1,7 +1,6 @@
 /* =========================================================
    MikuChat · js/config.js
-   ⚠️ PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE
-   (ver README.md — paso a paso con imágenes)
+   ⚠️ DILE AL CREADOR QUE PEGE AQUÍ SU CONFIGURACIÓN DE FIREBASE
    ========================================================= */
 
 const FIREBASE_CONFIG = {

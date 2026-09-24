@@ -1,1 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MikuChat 💬</title>
+<link rel="icon" href="https://i.ibb.co/spjbhzgR/images.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+<!-- ================= PANTALLA DE ACCESO ================= -->
+<div id="auth-screen">
+  <div id="bg-notes"></div>
+  <div class="auth-card">
+    <img class="auth-logo" src="https://i.ibb.co/spjbhzgR/images.jpg" alt="MikuChat">
+    <h1>MikuChat</h1>
+    <p class="auth-sub">Chatea como Miku 🎤 · Creado por <b>Chizu</b></p>
+
+    <div class="auth-tabs">
+      <button id="tab-login" class="on">Ya tengo cuenta</button>
+      <button id="tab-register">Registrarme</button>
+    </div>
+
+    <div id="login-form">
+      <input id="login-user" placeholder="Username" autocomplete="username">
+      <input id="login-pass" type="password" placeholder="Contraseña" autocomplete="current-password">
+      <button class="btn" id="btn-login">Entrar 💬</button>
+      <p class="hint">Al entrar se carga toda tu cuenta: chats, grupos, estados y contactos 🎵</p>
+    </div>
+
+    <div id="register-form" class="hidden">
+      <input id="reg-user" placeholder="Elige un username (letras, números, - _ )">
+      <input id="reg-pass" type="password" placeholder="Contraseña">
+      <input id="reg-pass2" type="password" placeholder="Repite la contraseña">
+      <button class="btn" id="btn-register">Crear cuenta ✨</button>
+      <p class="hint">Se te generará tu número de MikuChat automáticamente 📱</p>
+    </div>
+
+    <div id="auth-error" class="hidden"></div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" class="hidden">
+  <!-- Barra lateral -->
+  <aside id="sidebar">
+    <header class="side-header">
+      <div class="me">
+        <img id="side-avatar" class="avatar" src="" alt="">
+        <div class="me-info">
+          <div class="me-name"><span id="side-name"></span><span id="side-check" class="hidden">✔️</span></div>
+          <div class="me-number" id="side-number"></div>
+        </div>
+      </div>
+      <div class="side-actions">
+        <button id="btn-status" title="Estados">🟢</button>
+        <button id="btn-new-group" title="Nuevo grupo">👥</button>
+        <button id="btn-new-chat" title="Nuevo chat">✏️</button>
+        <button id="btn-admin" class="hidden" title="Panel admin">🛡️</button>
+        <button id="btn-edit-profile" title="Editar perfil">⚙️</button>
+        <button id="btn-logout" title="Cerrar sesión">🚪</button>
+      </div>
+    </header>
+    <div class="search-box"><input id="search-input" placeholder="🔍 Buscar chat..."></div>
+    <div id="chat-list"></div>
+  </aside>
+
+  <!-- Panel de chat -->
+  <main id="chat-pane">
+    <div id="chat-placeholder">
+      <img src="https://i.ibb.co/spjbhzgR/images.jpg" alt="">
+      <h2>MikuChat</h2>
+      <p>Selecciona un chat o crea uno nuevo ✨</p>
+    </div>
+
+    <div id="chat-view" class="hidden">
+      <header class="chat-header">
+        <button id="btn-back" class="only-mobile">←</button>
+        <img id="chat-header-avatar" class="avatar" src="" alt="">
+        <div class="chat-header-info">
+          <div class="chat-header-name"><span id="chat-header-name"></span><span id="chat-header-check" class="hidden">✔️</span></div>
+          <div id="chat-header-status"></div>
+        </div>
+        <div class="chat-header-actions">
+          <button id="btn-add-member" class="hidden" title="Agregar persona al grupo">➕👤</button>
+          <button id="btn-block" title="Bloquear / desbloquear">🚫</button>
+        </div>
+      </header>
+
+      <div id="messages"></div>
+
+      <div id="composer">
+        <button id="btn-sticker" title="Stickers">😜</button>
+        <button id="btn-emoji" title="Emojis">😊</button>
+        <button id="btn-attach" title="Foto o video">📎</button>
+        <input id="composer-input" placeholder="Escribe un mensaje..." autocomplete="off">
+        <button id="btn-mic" title="Mensaje de voz">🎤</button>
+        <button id="btn-send" class="hidden">➤</button>
+        <button id="btn-cancel-audio" class="hidden">✖</button>
+        <div id="recording-indicator" class="hidden">🔴 Grabando... <span id="rec-time">0s</span></div>
+      </div>
+      <input type="file" id="file-input" accept="image/*,video/*" style="display:none">
+    </div>
+  </main>
+</div>
+
+<!-- ================= MODALES ================= -->
+<div id="modal-profile" class="modal hidden">
+  <div class="modal-card">
+    <h3>Editar perfil ✏️</h3>
+    <div class="profile-photo-box"><img id="profile-photo-preview" class="avatar big" src=""></div>
+    <button class="btn small ghost" id="btn-change-photo">📷 Cambiar foto</button>
+    <input type="file" id="profile-photo-input" accept="image/*" style="display:none">
+    <label>Estado / bio</label>
+    <input id="profile-bio" placeholder="Hola, uso MikuChat 🎵" maxlength="60">
+    <div class="row"><button class="btn" id="btn-save-profile">Guardar 💾</button>
+    <button class="btn ghost" data-close>Cerrar</button></div>
+  </div>
+</div>
+
+<div id="modal-newchat" class="modal hidden">
+  <div class="modal-card">
+    <h3>Nuevo chat ✨</h3>
+    <input id="newchat-user" placeholder="Username de la persona">
+    <div class="row"><button class="btn" id="btn-start-chat">Chatear 💬</button>
+    <button class="btn ghost" data-close>Cerrar</button></div>
+  </div>
+</div>
+
+<div id="modal-newgroup" class="modal hidden">
+  <div class="modal-card">
+    <h3>Nuevo grupo 👥</h3>
+    <input id="group-name" placeholder="Nombre del grupo">
+    <input id="group-members" placeholder="Usernames separados por comas">
+    <div class="row"><button class="btn" id="btn-create-group">Crear grupo 🎉</button>
+    <button class="btn ghost" data-close>Cerrar</button></div>
+  </div>
+</div>
+
+<div id="modal-admin" class="modal hidden">
+  <div class="modal-card wide">
+    <h3>🛡️ Panel de administradores</h3>
+    <div id="admin-list"></div>
+    <div class="row"><button class="btn ghost" data-close>Cerrar</button></div>
+  </div>
+</div>
+
+<div id="modal-status" class="modal hidden">
+  <div class="modal-card">
+    <h3>Estados 🟢</h3>
+    <div class="status-post">
+      <input id="status-text" placeholder="¿Qué piensas? ✨" maxlength="120">
+      <div class="row">
+        <button class="btn small" id="btn-status-text">Publicar texto 📝</button>
+        <button class="btn small secondary" id="btn-status-photo">📷 Foto</button>
+      </div>
+      <input type="file" id="status-photo-input" accept="image/*" style="display:none">
+    </div>
+    <div id="status-list"></div>
+    <div class="row"><button class="btn ghost" data-close>Cerrar</button></div>
+  </div>
+</div>
+
+<div id="modal-statusview" class="modal hidden dark-modal">
+  <div class="status-viewer">
+    <div class="sv-header"><span id="sv-name"></span><button data-close>✖</button></div>
+    <div class="sv-progress"><div id="sv-bar"></div></div>
+    <div id="sv-content"></div>
+  </div>
+</div>
+
+<div id="sticker-popover" class="popover hidden"></div>
+<div id="emoji-popover" class="popover hidden"></div>
+
+<div id="image-viewer" class="hidden"><img id="image-viewer-img" src=""><button data-close>✖</button></div>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+<script src="js/config.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/media.js"></script>
+<script src="js/status.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

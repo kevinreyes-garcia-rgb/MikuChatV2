@@ -7,8 +7,8 @@ function initFirebase() {
   if (FIREBASE_CONFIG.apiKey === "TU_API_KEY") {
     document.body.innerHTML = `<div style="color:#fff;font-family:sans-serif;max-width:600px;margin:80px auto;padding:20px">
       <h1>⚠️ Falta configurar Firebase</h1>
-      <p>Abre <b>js/config.js</b> y pega tu configuración.</p>
-      <p>Lee el <b>README.md</b> del proyecto: paso a paso (es gratis y toma 5 minutos).</p></div>`;
+      <p>Dile al admin que abra <b>js/config.js</b> y pege su configuración.</p>
+      <p>si no <b>README.md</b> el proyecto no funcionara (es gratis y toma 5 minutos).</p></div>`;
     throw new Error("Firebase no configurado");
   }
   firebase.initializeApp(FIREBASE_CONFIG);
